@@ -17,6 +17,8 @@ def parse_message(message):
     return [kakera_type, kakera_value, username]
 
 
+
+
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
