@@ -1,6 +1,7 @@
 # bot.py
 import os
 import re
+import gspread
 
 import discord
 from dotenv import load_dotenv
@@ -16,8 +17,11 @@ def parse_message(message):
 
     return [kakera_type, kakera_value, username]
 
+gc = gspread.service_account(filename="creds.json")
 
-
+sh = gc.open("Mudae badge calcs").get_worksheet(1)
+name = sh.acell("a2").value
+print(name)
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -42,9 +46,14 @@ async def on_ready():
 @client.event
 async def on_message(message):
     # global str2
+    global troll_msg
+    re_say = re.search("^\\$say", message.content)
+    if re_say is not None:
+        troll_arr = re_say.string.split(" ", 1)
+        troll_msg = troll_arr[1]
     if message.author.id == 432610292342587392:
         x = re.search("^:kakera", message.content)
-        if x is not None:
+        if x is not None and x.string != troll_msg:
             p_message = parse_message(x.string)
             print(p_message)
 
